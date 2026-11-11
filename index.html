@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>مدل برآورد قیمت تجهیزات آزمایشگاهی ۲۰۲۷</title>
+<script>window.MathJax = { tex: { inlineMath: [['\\(', '\\)']], displayMath: [['$$', '$$']] } };</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<style>
+  :root { --bg:#fff; --fg:#1d2330; --muted:#5b6475; --line:#d9dee8; --head:#eef2f8; --accent:#1f5fbf; --warn-bg:#fff6e0; --warn-line:#e0b34a; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#14181f; --fg:#e6e9ef; --muted:#9aa4b5; --line:#2c3442; --head:#1d2430; --accent:#6ea4f4; --warn-bg:#2b2410; --warn-line:#8a6d1f; }
+  }
+  body { margin:0; background:var(--bg); color:var(--fg); font-family:"Vazirmatn","Tahoma","Segoe UI",sans-serif; line-height:1.9; }
+  main { max-width:980px; margin:0 auto; padding:32px 20px 64px; }
+  h1 { font-size:1.7rem; line-height:1.5; margin:0 0 12px; }
+  h2 { font-size:1.2rem; margin:36px 0 10px; padding-bottom:6px; border-bottom:2px solid var(--line); color:var(--accent); }
+  p, li { font-size:1rem; }
+  .lead { color:var(--muted); }
+  .warn { background:var(--warn-bg); border-right:4px solid var(--warn-line); padding:10px 16px; border-radius:6px; margin:18px 0; }
+  .table-wrap { overflow-x:auto; margin:12px 0; }
+  table { border-collapse:collapse; width:100%; font-size:.92rem; }
+  th, td { border:1px solid var(--line); padding:7px 10px; text-align:center; white-space:nowrap; }
+  th { background:var(--head); }
+  td:first-child, th:first-child { text-align:right; white-space:normal; }
+  tr.total td { font-weight:700; background:var(--head); }
+  .formula { direction:ltr; text-align:left; overflow-x:auto; margin:14px 0; padding:8px 12px; background:var(--head); border-radius:6px; }
+  .num { direction:ltr; unicode-bidi:isolate; }
+  ol, ul { padding-right:22px; }
+</style>
+</head>
+<body>
+<main>
+
+<h1>مدل برآورد قیمت تجهیزات آزمایشگاهی ۲۰۲۷ و تخصیص به بیمارستان‌های ایران</h1>
+<p class="lead">بر پایهٔ سری قیمت ۲۰۲۲–۲۰۲۶، نیاز تجهیزاتی سال ۲۰۲۷ حدود ۶۰٫۳ میلیون دلار (≈ ۷۷٬۹۰۰ میلیارد ریال) برآورد می‌شود؛ با سقف ارزی بانک مرکزی، فقط ≈ ۴۸٪ آن قابل تأمین است و ارز، نه اعتبار ریالی، قید اصلی تخصیص است.</p>
+
+<div class="warn"><strong>هشدار دادهٔ نمونه:</strong> هیچ داده‌ای از شما دریافت نشد. همهٔ اعداد این سند (قیمت‌ها، نرخ ارز، تعداد دستگاه، سقف اعتبار سازمان برنامه و بودجه، سقف ارزی بانک مرکزی، تعداد و تخت بیمارستان‌ها) فرضی و فقط برای نمایش کارکرد مدل‌اند. جدول‌ها قابل ویرایش‌اند؛ با داده‌های رسمی جایگزین کنید تا خروجی معتبر شود.</div>
+
+<h2>منطق مدل</h2>
+<ol>
+  <li>روند لگاریتمی–خطی قیمت دلاری هر گروه تجهیز و نرخ ارز، روی ۵ سال، به ۲۰۲۷ برون‌یابی می‌شود.</li>
+  <li>نیاز دلاری ۲۰۲۷ = تعداد × قیمت پیش‌بینی × ضریب هزینهٔ تمام‌شده (حمل، بیمه، گمرک، ۱٫۱۲ فرضی).</li>
+  <li>از سقف ارزی بانک مرکزی، ابتدا تعهدات ارزی معوق تسویه می‌شود؛ باقی‌مانده برای خرید جدید است.</li>
+  <li>نیاز هر گروه بیمارستان بر اساس وزن (تخت × شاخص کمبود تجهیز) سهم‌بندی و با ضریب پوشش، که کمینهٔ پوشش ارزی و ریالی است، تعدیل می‌شود.</li>
+</ol>
+
+<div class="formula">
+$$\ln P_{i,t}=a_i+b_i t,\quad \hat P_{i,2027}=e^{a_i+2027\,b_i}$$
+$$N=k\sum_i q_i\hat P_{i,2027},\quad w_g=\text{beds}_g\cdot d_g$$
+$$c_{FX}=\frac{Q-A}{N},\quad c_{R}=\frac{B}{\hat r\,N_{pub}},\quad c_g=\begin{cases}\min(c_{FX},c_R)&\text{public}\\ c_{FX}&\text{private}\end{cases}$$
+$$\text{Alloc}_g=c_g\cdot N\cdot \frac{w_g}{\sum w}$$
+</div>
+<p>Q سقف ارزی بانک مرکزی، A تعهدات ارزی معوق، B اعتبار ریالی سازمان برنامه و بودجه، r̂ نرخ پیش‌بینی ارز، k ضریب هزینهٔ تمام‌شده.</p>
+
+<h2>ورودی ۵ ساله (فرضی، قابل ویرایش)</h2>
+<p>قیمت هر دستگاه به هزار دلار (میانگین سال میلادی)، نرخ ارز به ریال به هر دلار.</p>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>گروه تجهیز</th><th>۲۰۲۲</th><th>۲۰۲۳</th><th>۲۰۲۴</th><th>۲۰۲۵</th><th>۲۰۲۶</th><th>تعداد نیاز ۲۰۲۷</th></tr></thead>
+  <tbody>
+    <tr><td>آنالایزر خون‌شناسی (CBC)</td><td>14.0</td><td>14.8</td><td>15.9</td><td>16.7</td><td>17.8</td><td>420</td></tr>
+    <tr><td>آنالایزر بیوشیمی</td><td>38.0</td><td>40.5</td><td>43.0</td><td>46.2</td><td>49.0</td><td>260</td></tr>
+    <tr><td>ایمونواسی و هورمون</td><td>55.0</td><td>58.9</td><td>63.0</td><td>67.5</td><td>72.4</td><td>150</td></tr>
+    <tr><td>دستگاه PCR و مولکولی</td><td>29.0</td><td>30.4</td><td>32.6</td><td>35.1</td><td>37.5</td><td>180</td></tr>
+    <tr><td>میکروسکوپ، سانتریفیوژ و تجهیزات عمومی</td><td>4.2</td><td>4.4</td><td>4.7</td><td>5.0</td><td>5.3</td><td>2400</td></tr>
+    <tr><td>نرخ ارز (ریال/دلار)</td><td>450000</td><td>520000</td><td>650000</td><td>850000</td><td>1050000</td><td>—</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h2>پیش‌بینی ۲۰۲۷</h2>
+<p>تورم دلاری تجهیزات سالانه حدود ۶ تا ۷٪ و رشد نرخ ارز حدود ۲۴٪ است؛ نرخ پیش‌بینی‌شده ۲۰۲۷ برابر <span class="num">1,292,285</span> ریال به هر دلار است.</p>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>گروه تجهیز</th><th>قیمت پیش‌بینی ۲۰۲۷ (هزار دلار)</th><th>رشد سالانه (٪)</th><th>نیاز دلاری بدون هزینهٔ تمام‌شده (میلیون دلار)</th></tr></thead>
+  <tbody>
+    <tr><td>آنالایزر خون‌شناسی (CBC)</td><td>18.90</td><td>6.2</td><td>7.94</td></tr>
+    <tr><td>آنالایزر بیوشیمی</td><td>52.30</td><td>6.6</td><td>13.60</td></tr>
+    <tr><td>ایمونواسی و هورمون</td><td>77.47</td><td>7.1</td><td>11.62</td></tr>
+    <tr><td>دستگاه PCR و مولکولی</td><td>39.93</td><td>6.8</td><td>7.19</td></tr>
+    <tr><td>میکروسکوپ، سانتریفیوژ و تجهیزات عمومی</td><td>5.62</td><td>6.1</td><td>13.49</td></tr>
+    <tr class="total"><td>جمع</td><td>—</td><td>—</td><td>53.83</td></tr>
+  </tbody>
+</table>
+</div>
+<p>با ضریب ۱٫۱۲، نیاز تمام‌شده ۶۰٫۳ میلیون دلار یا ۷۷٬۹۱۱ میلیارد ریال می‌شود.</p>
+
+<h2>منابع ارزی و ریالی (فرضی)</h2>
+<p>۹ میلیون دلار از سقف ارزی صرف تسویه تعهدات معوق می‌شود و فقط ۲۹ میلیون دلار برای خرید جدید می‌ماند.</p>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>قلم</th><th>مقدار</th></tr></thead>
+  <tbody>
+    <tr><td>سقف ارزی بانک مرکزی (Q)</td><td>۳۸ میلیون دلار</td></tr>
+    <tr><td>تعهدات ارزی معوق (A)</td><td>۹ میلیون دلار</td></tr>
+    <tr><td>ارز قابل خرید جدید (Q − A)</td><td>۲۹ میلیون دلار</td></tr>
+    <tr><td>اعتبار ریالی سازمان برنامه و بودجه (B)</td><td>۴۵٬۰۰۰ میلیارد ریال</td></tr>
+    <tr><td>ضریب پوشش ارزی c<sub>FX</sub></td><td>۴۸٫۱٪</td></tr>
+    <tr><td>ضریب پوشش ریالی دولتی c<sub>R</sub></td><td>۶۳٫۵٪</td></tr>
+  </tbody>
+</table>
+</div>
+<p>ارز مهار اصلی است: مینیمم دو ضریب، یعنی ۴۸٫۱٪ نیاز قابل تأمین است و حدود ۱۰٬۹۳۰ میلیارد ریال از اعتبار دولتی مصرف‌نشده می‌ماند؛ می‌توان از آن برای تجهیزات داخلی‌ساز یا افزایش سقف ارزی درخواستی استفاده کرد.</p>
+
+<h2>تخصیص به گروه‌های بیمارستانی</h2>
+<p>بیمارستان‌های دانشگاهی ۷۲٫۶٪ از نیاز را می‌گیرند و همهٔ گروه‌ها به ۴۸٫۱٪ نیاز خود می‌رسند. تعداد و تخت بیمارستان‌ها تقریبی و باید با فهرست رسمی وزارت بهداشت جایگزین شود.</p>
+<div class="table-wrap">
+<table>
+  <thead><tr><th>گروه</th><th>تعداد بیمارستان</th><th>تخت</th><th>شاخص کمبود (d)</th><th>سهم نیاز (٪)</th><th>نیاز (میلیون دلار)</th><th>تخصیص ارزی (میلیون دلار)</th><th>معادل ریالی (میلیارد ریال)</th><th>هر بیمارستان (هزار دلار)</th></tr></thead>
+  <tbody>
+    <tr><td>دانشگاهی وزارت بهداشت</td><td>600</td><td>95000</td><td>1.00</td><td>72.6</td><td>43.79</td><td>21.06</td><td>27219</td><td>35.1</td></tr>
+    <tr><td>تأمین اجتماعی</td><td>90</td><td>12000</td><td>0.85</td><td>7.8</td><td>4.70</td><td>2.26</td><td>2922</td><td>25.1</td></tr>
+    <tr><td>نیروهای مسلح</td><td>60</td><td>10000</td><td>0.80</td><td>6.1</td><td>3.69</td><td>1.77</td><td>2292</td><td>29.6</td></tr>
+    <tr><td>سایر دولتی و خیریه</td><td>50</td><td>6000</td><td>0.95</td><td>4.4</td><td>2.63</td><td>1.26</td><td>1633</td><td>25.3</td></tr>
+    <tr><td>خصوصی (با ریال خودشان)</td><td>230</td><td>17000</td><td>0.70</td><td>9.1</td><td>5.49</td><td>2.64</td><td>3410</td><td>11.5</td></tr>
+    <tr class="total"><td>جمع</td><td>1030</td><td>140000</td><td>—</td><td>100</td><td>60.29</td><td>29.00</td><td>37476</td><td>—</td></tr>
+  </tbody>
+</table>
+</div>
+<p>بیمارستان‌های خصوصی از اعتبار دولتی سهمی ندارند؛ فقط سهمیهٔ ارزی دریافت می‌کنند و ریال آن را خود می‌پردازند.</p>
+
+<h2>تخصیص به هر بیمارستان</h2>
+<p>برای هر بیمارستان h در گروه g، سهم همان فرمول وزن با تخت و شاخص کمبود مخصوص او است:</p>
+<div class="formula">
+$$\text{Alloc}_h=\text{Alloc}_g\cdot\frac{\text{beds}_h\, d_h}{\sum_{j\in g}\text{beds}_j\, d_j}$$
+</div>
+<p>با فهرست کامل بیمارستان‌ها (کد، نوع مالکیت، تخت، سن و وضعیت تجهیزات) این محاسبه برای همهٔ بیمارستان‌ها انجام می‌شود.</p>
+
+<h2>چه چیزی باید جایگزین شود</h2>
+<ul>
+  <li>قیمت‌ها، نرخ ارز و تعداد دستگاه با داده واقعی سال‌های ۲۰۲۲–۲۰۲۶.</li>
+  <li>سقف اعتبار و سقف ارزی از ابلاغ رسمی سازمان برنامه و بودجه و بانک مرکزی.</li>
+  <li>فهرست بیمارستان‌ها و شاخص کمبود هر کدام از وزارت بهداشت، تأمین اجتماعی و نهادهای مربوط.</li>
+</ul>
+
+</main>
+</body>
+</html>
